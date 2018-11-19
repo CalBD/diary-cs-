@@ -1,0 +1,105 @@
+---
+title: "Assignment 4_ggplot2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Chapter 1 of ggplot2
+
+Explanatory vs. Exploratory
+Graphics: distint layers of grammatical elements 
+```{r cars}
+install.packages("ggplot2")
+library(ggplot2)
+
+```
+
+## Creating dataframes: planets_df
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+# Definition of vectors
+name <- c("Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune")
+type <- c("Terrestrial planet", "Terrestrial planet", "Terrestrial planet", 
+          "Terrestrial planet", "Gas giant", "Gas giant", "Gas giant", "Gas giant")
+diameter <- c(0.382, 0.949, 1, 0.532, 11.209, 9.449, 4.007, 3.883)
+rotation <- c(58.64, -243.02, 1, 1.03, 0.41, 0.43, -0.72, 0.67)
+rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+
+# Create a data frame from the vectors
+planets_df <-data.frame(name, type, diameter, rotation, rings)
+```
+
+Plotting rotation(x) against diameter (y)  with color = type  
+```{r}
+ggplot(planets_df, aes(x = rotation, y = diameter, color = type)) +
+  geom_point()
+```
+Recycling ggplots with modifications in the geomplot()
+```{r}
+dia_planets <- ggplot(planets_df, aes(x = rotation, y = diameter))
+dia_planets + geom_point(aes(color = rings))
+```
+Creating a new dataframe for chapter 2 
+```{r}
+# Definition of vectors
+pencil.length <- c(10, 22, 14, 15, 77, 20)
+pencil.width <- c(13, 52, 16, 45, 71, 24)
+eraser.length <- c(1, 2, 3,1, 1, 1)
+eraser.width <- c(1, 3, 2,2, 1, 1)
+pencil_color <- c("red", "blue", "pink")
+
+# Create a data frame from the vectors
+the_pencil <-data.frame(pencil.length, pencil.width, eraser.length, eraser.width, pencil_color)
+```
+Creating the_pencil_tidy
+```{r}
+# Load the tidyr package
+library(tidyr)
+
+# creating th_pencil_wide
+the_pencil.tidy <- the_pencil %>%
+  gather(key, Value, -pencil_color) %>%
+  separate(key, c("Part", "Measure"), "\\.")
+```
+# Map mpg onto x, qsec onto y and factor(cyl) onto col (3 aesthetics):
+ggplot(mtcars, aes(x = mpg, y = qsec, col = factor(cyl))) +
+  geom_point()
+
+# Add mapping: factor(am) onto shape (now 4 aesthetics):
+ggplot(mtcars, aes(x = mpg, y = qsec, col = factor(cyl), shape = factor(am))) +
+  geom_point()
+
+# Add mapping: (hp/wt) onto size (now 5 aesthetics):
+ggplot(mtcars, aes(x = mpg, y = qsec, col = factor(cyl), shape = factor(am), size = (hp/wt))) +
+  geom_point()
+  
+  
+  
+  
+  
+  # Hollow circles - an improvement
+ggplot(mtcars, aes(x = wt, y = mpg, color = cyl)) +
+  geom_point(size = 4, shape = 1)
+
+# Add transparency - very nice
+ggplot(mtcars, aes(x = wt, y = mpg, color = cyl)) +
+  geom_point(size = 4, alpha = 0.6)
+  
+  
+  
+  # Adjust for overplotting
+ggplot(diamonds, aes(x = carat, y = price, color = clarity)) +
+  geom_point(alpha = 0.5)
+  
+  
+  # 1 - Make a univariate histogram
+ggplot(mtcars, aes(mpg)) +
+  geom_histogram()
+  
+  # Draw a bar plot of cyl, filled according to am
+ggplot(mtcars, aes(x = cyl, fill = am)) +
+  geom_bar()
